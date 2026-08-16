@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080b09">
+<title>Umbrella Archives // 038</title>
+<style>
+  :root {
+    --bg: #070908;
+    --panel: #0d110f;
+    --panel-2: #111612;
+    --line: #27312b;
+    --text: #d7ded9;
+    --muted: #7f8c84;
+    --green: #8fae9b;
+    --green-bright: #b6d3bf;
+    --error: #c48686;
+    --shadow: rgba(0,0,0,.45);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 50% -10%, rgba(104,130,112,.09), transparent 40%),
+      var(--bg);
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: .035;
+    background-image: repeating-linear-gradient(
+      0deg, transparent 0, transparent 3px, #fff 4px
+    );
+    mix-blend-mode: screen;
+  }
+
+  .system, button, input, .terminal, .eyebrow, .case-meta, .archive-end {
+    font-family: "Courier New", Courier, monospace;
+  }
+
+  .screen {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+
+  .panel {
+    width: min(680px, 100%);
+    border: 1px solid var(--line);
+    background: linear-gradient(145deg, rgba(17,22,18,.96), rgba(8,11,9,.98));
+    box-shadow: 0 22px 70px var(--shadow);
+  }
+
+  .panel-inner { padding: clamp(28px, 6vw, 56px); }
+
+  .eyebrow {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: .12em;
+    margin-bottom: 28px;
+  }
+
+  h1 {
+    margin: 0;
+    color: var(--green-bright);
+    font: 700 clamp(30px, 7vw, 52px)/1 "Courier New", monospace;
+    letter-spacing: .04em;
+  }
+
+  .intro {
+    color: #aeb8b2;
+    line-height: 1.65;
+    margin: 24px 0 30px;
+  }
+
+  .access-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  input {
+    min-width: 0;
+    flex: 1;
+    border: 1px solid var(--line);
+    background: #080b09;
+    color: var(--green-bright);
+    padding: 15px 16px;
+    outline: none;
+    font-size: 18px;
+    letter-spacing: .2em;
+  }
+
+  input:focus { border-color: #53665a; }
+
+  button {
+    border: 1px solid #53665a;
+    background: #172019;
+    color: var(--green-bright);
+    padding: 0 20px;
+    cursor: pointer;
+    letter-spacing: .08em;
+  }
+
+  button:hover { background: #1d2a21; }
+
+  .hint {
+    color: var(--muted);
+    font: 12px/1.5 "Courier New", monospace;
+    margin-top: 14px;
+  }
+
+  .status {
+    min-height: 22px;
+    margin-top: 18px;
+    color: var(--error);
+    font: 12px "Courier New", monospace;
+    letter-spacing: .05em;
+  }
+
+  .hidden { display: none !important; }
+
+  .terminal {
+    width: min(760px, 100%);
+    border: 1px solid var(--line);
+    background: #060806;
+    padding: 28px;
+    box-shadow: 0 22px 70px var(--shadow);
+  }
+
+  .terminal-line {
+    color: var(--green);
+    font-size: 13px;
+    line-height: 2;
+    opacity: 0;
+    animation: reveal .35s forwards;
+  }
+
+  @keyframes reveal { to { opacity: 1; } }
+
+  .letter-wrap {
+    width: min(820px, 100%);
+    margin: 0 auto;
+    padding: 36px 20px 60px;
+  }
+
+  .case-header {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+    margin-bottom: 34px;
+  }
+
+  .case-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: .1em;
+  }
+
+  .case-title {
+    margin: 15px 0 0;
+    font: 700 clamp(24px, 6vw, 38px)/1.1 "Courier New", monospace;
+    color: var(--green-bright);
+  }
+
+  .access {
+    display: inline-block;
+    margin-top: 13px;
+    color: var(--green);
+    font: 12px "Courier New", monospace;
+    letter-spacing: .12em;
+  }
+
+  .letter {
+    border: 1px solid var(--line);
+    background: rgba(13,17,15,.72);
+    padding: clamp(25px, 6vw, 48px);
+    box-shadow: 0 18px 55px rgba(0,0,0,.25);
+  }
+
+  .letter-label {
+    color: var(--muted);
+    font: 11px "Courier New", monospace;
+    letter-spacing: .12em;
+    margin-bottom: 25px;
+  }
+
+  .letter h2 {
+    font-size: 24px;
+    font-weight: 500;
+    margin: 0 0 30px;
+  }
+
+  .letter p {
+    font-size: 17px;
+    line-height: 1.85;
+    margin: 0 0 23px;
+    color: #d2d8d4;
+  }
+
+  .highlight {
+    text-align: center;
+    color: var(--green-bright) !important;
+    font-family: "Courier New", monospace;
+    letter-spacing: .04em;
+    padding: 16px 0;
+    margin: 34px 0 !important;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .archive-end {
+    text-align: center;
+    color: var(--muted);
+    font-size: 10px;
+    letter-spacing: .12em;
+    margin-top: 34px;
+  }
+
+  @media (max-width: 520px) {
+    .screen { padding: 14px; }
+    .panel-inner { padding: 28px 22px; }
+    .access-row { flex-direction: column; }
+    button { min-height: 48px; }
+    .terminal { padding: 22px 18px; }
+    .terminal-line { font-size: 11px; }
+    .case-meta { flex-direction: column; gap: 8px; }
+    .letter-wrap { padding: 24px 12px 40px; }
+    .letter { padding: 24px 20px; }
+    .letter p { font-size: 16px; line-height: 1.8; }
+  }
+</style>
+</head>
+<body>
+
+<section id="lockScreen" class="screen">
+  <main class="panel">
+    <div class="panel-inner">
+      <div class="eyebrow">UMBRELLA ARCHIVES // PRIVATE ACCESS</div>
+      <h1>ARQUIVO 038</h1>
+      <p class="intro">
+        «Este arquivo foi selado.<br>
+        O número escolhido é a chave para abrir o conteúdo.»
+      </p>
+
+      <form id="accessForm">
+        <div class="access-row">
+          <input id="codeInput" inputmode="numeric" autocomplete="off" maxlength="3"
+                 aria-label="Código de acesso" placeholder="•••">
+          <button type="submit">ACESSAR</button>
+        </div>
+      </form>
+
+      <div class="hint">«DICA: você escolheu a chave.»</div>
+      <div id="status" class="status" aria-live="polite"></div>
+    </div>
+  </main>
+</section>
+
+<section id="transitionScreen" class="screen hidden">
+  <div class="terminal" id="terminal"></div>
+</section>
+
+<main id="letterScreen" class="letter-wrap hidden">
+  <header class="case-header">
+    <div class="case-meta">
+      <span>CASE FILE / 038</span>
+      <span>CLASSIFIED</span>
+    </div>
+    <div class="case-title">ACCESS GRANTED</div>
+    <div class="access">REGISTRO PESSOAL</div>
+  </header>
+
+  <article class="letter">
+    <div class="letter-label">PERSONAL RECORD // PRIVATE</div>
+    <h2>Pra você 🫶🏻</h2>
+
+    <p>Eu sei que pode ser meio clichê receber uma carta em pleno século 21 KKKKK. Minha intenção era fazer ela em papel, porque acho que seria mais legalzinho você ler assim, mas acabei querendo fazer algo diferente. Principalmente porque queria que fosse uma surpresa. Você pediu um desenho e acabou recebendo um desenho e uma carta. Espero que esse pequeno desvio de rota seja perdoado KKKKK.</p>
+
+    <p>Enquanto eu tava desenhando — ou tentando, porque ainda estou longe de poder me chamar de artista — você ficava passando pela minha cabeça. Acho que era inevitável, considerando que foi você quem me inspirou pra aprender a desenhar.</p>
+
+    <p>O desenho não é exatamente uma cena do jogo. Fui juntando coisas que lembram você e que eu sabia que você gostava. O castelo veio daquele seu post mostrando seu castelo de Lego, e o Village trouxe bastante inspiração porque é meu favorito da franquia, só ficando atrás do 4, porque esse você me ensinou a gostar demais. E o Salazar, obviamente, tinha que aparecer. Não dava pra fazer algo inspirado em RE e deixar aquele cara irritante de fora KKKKK.</p>
+
+    <p>No fim, ficou essa mistura meio aleatória. E acho que é justamente isso que gostei: não é uma cena que existe no jogo, é uma cena que eu montei pensando em você.</p>
+
+    <p>Foram 11 rascunhos iniciais e 2 desenhos prontos que precisei descartar. E o mais curioso foi perceber que nossas aulas começaram no dia 11/02.</p>
+
+    <p class="highlight">Pegou a referência?</p>
+
+    <p>Acho que nunca foi novidade que eu sempre gostei muito de ti, né? Mas tu já se perguntou desde quando?</p>
+
+    <p>Desde o primeiro dia de aula. Eu te vi e, sinceramente, depois disso simplesmente não consegui mais desver. Foi ali que decidi que, pra mim, a escola nova já tinha valido a pena.</p>
+
+    <p class="highlight">Agora entendeu?</p>
+
+    <p>Meus números pra fazer teu desenho foram 11 e 2, e eu “esperei” e gosto de ti desde o 11/02. Loucura, né? Parece até algo que acontece em filme.</p>
+
+    <p>Sobre o desenho, desculpa por não ter feito só o Leon. Ele realmente exigia um nível muito alto e que provavelmente só tu tem KKKKK.</p>
+
+    <p>Coloquei Ada, Ashley e Luis porque fazem parte do RE4, o Leon ficou no topo porque, bom... ele é o Leon, e aquele baixinho entrou porque lembrei de quanto ele nos incomodou — e ainda vai incomodar, porque a gente com certeza vai zerar RE4 mais vezes.</p>
+
+    <p>Eu sei que não ficou perfeito, mas foi fazendo esse desenho que percebi o quanto é curioso ter começado a aprender algo que nunca imaginei, só porque você me inspirou. E, se fosse preciso, eu aprenderia bem mais do que só desenhar pra fazer algo que tu gosta. Acho que não preciso explicar muito além disso.</p>
+
+    <p>Agora, deixando o desenho um pouco de lado...</p>
+
+    <p>Ainda acho muito maluco pensar que estou conversando com você. Teve uma época em que achei que talvez nunca tivesse nem a oportunidade de trocar um simples “oi” contigo. E, de alguma forma, hoje estou aqui escrevendo uma carta que você nem pediu.</p>
+
+    <p>Gosto muito das nossas conversas, do teu jeito e de como, mesmo sem perceber, você acabou se tornando alguém que eu tenho muita vontade de conhecer cada vez mais.</p>
+
+    <p>E sobre você ser linda... bom, isso você já sabe. Quanto mais eu te conheço, mais essa certeza aumenta. E não é só a aparência. Tem alguma coisa no teu jeito que faz você ser ainda mais incrível.</p>
+
+    <p>Pena que você não cabe no meu inventário de Resident Evil. Se coubesse, provavelmente já teria ocupado um espaço permanente.</p>
+
+    <p>Espero que você goste do desenho. Ele não é perfeito, mas cada detalhe teve algum motivo pra estar ali.</p>
+
+    <p class="highlight">E a carta?</p>
+
+    <p>Bom... essa você definitivamente não pediu.</p>
+
+    <p>Mas talvez tenha sido justamente por isso que eu quis fazer. 🫶🏻</p>
+
+    <div class="archive-end">ARQUIVO 038 // FIM DO REGISTRO</div>
+  </article>
+</main>
+
+<script>
+  const lockScreen = document.getElementById("lockScreen");
+  const transitionScreen = document.getElementById("transitionScreen");
+  const letterScreen = document.getElementById("letterScreen");
+  const form = document.getElementById("accessForm");
+  const input = document.getElementById("codeInput");
+  const status = document.getElementById("status");
+  const terminal = document.getElementById("terminal");
+
+  const lines = [
+    "«verificando credencial...»",
+    "«código recebido: 038»",
+    "«código aceito.»",
+    "«localizando arquivo...»",
+    "«ARQUIVO 038 ENCONTRADO.»",
+    "«acesso concedido»"
+  ];
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const code = input.value.trim();
+
+    if (code === "38" || code === "038") {
+      status.textContent = "";
+      lockScreen.classList.add("hidden");
+      transitionScreen.classList.remove("hidden");
+      terminal.innerHTML = "";
+
+      lines.forEach((line, index) => {
+        const el = document.createElement("div");
+        el.className = "terminal-line";
+        el.textContent = line;
+        el.style.animationDelay = `${index * 0.28}s`;
+        terminal.appendChild(el);
+      });
+
+      setTimeout(() => {
+        transitionScreen.classList.add("hidden");
+        letterScreen.classList.remove("hidden");
+        window.scrollTo(0, 0);
+      }, 2200);
+    } else {
+      status.textContent = "CÓDIGO INCORRETO.";
+      input.value = "";
+      input.focus();
+    }
+  });
+
+  input.focus();
+</script>
+</body>
+</html>
